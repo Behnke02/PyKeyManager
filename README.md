@@ -15,5 +15,7 @@ Despite the massive gain in personal digital security by moving passwords off of
 ## Secure Password Generation
 Using the same password for multiple websites is incredibly reckless, but unfortunately with all of our online servies being locked behind passwords, most people (myself included) don't really care to take the effort to create lengthy, secure, and most importantly, memorable passwords for each and every site.  To help keep others (and more important myself) from falling back into this trap of using the same password, I want to create a feature to generate a new secure password upon request, and add it as a new entry into the .csv file, preferably with the resulting password being strong enough to fulfill most websites' password requirements.
 
+NOTE: Basic password generation functionality has been implemented.
+
 ## Additional Password Storage Information
 This is more of a nice-to-have since I can't really think of practical use cases for additional information beyond the Website, Password, and Current Status, however I think some additional information on password entries could be nice to include, such as the time of password storage.
