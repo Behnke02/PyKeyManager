@@ -1,7 +1,9 @@
 import pandas
-
+import string
+import secrets
 PASSWORD_FILE = "passwords.csv"
 COLUMN_NAMES = ['Website', 'Password', 'Current']
+PASSWORD_CHARACTERS = string.printable
 
 def main():
     #Read password file
@@ -13,22 +15,26 @@ def main():
     #Check if file is empty (Indicates new user)
     
     #Print introductory list
-    print("Welcome to PasswordManager!")
+    print("Welcome to PasswordManager!", end="\n\n")
     print("Please select an option from the list below:", end="\n\n")
     while True:
         #Display options (Retrieve, Create, Update, Delete, Exit)
         print("Retrieve: Fetch a password you need (R)")
         print("Create: Store a new password (C)")
+        print("    NEW: Generate a new password and store (G)")
         print("Update: Update an already-existing password (U)")
         print("Delete: Delete a password entry (D)")
         print("    NOTE: If you're just changing an expired password, you can UPDATE instead and it will store any previous passwords for a website.")
         print("Exit: Exit the program (E)")
         #Wait for user input
-        option = input("Select your option (R, C, U, D, E): ").upper()
+        option = input("Select your option (R, C, G, U, D, E): ").upper()
+        print()
         if option == 'R':
             retrieve_password(password_df)
         elif option == 'C':
             create_entry(password_df)
+        elif option == 'G':
+            generate_entry(password_df)
         elif option == 'U':
             update_entry(password_df)
         elif option == 'D':
@@ -69,6 +75,7 @@ def retrieve_password(password_df : pandas.DataFrame) -> None:
     print(password_df.query('Website == @website'))
     #Return to main options list upon user completion
     input("Press \'Enter\' to return to menu")
+    print('', end="\n\n")
 
 def create_entry(password_df : pandas.DataFrame) -> None:
     print("Creating new password entry")
@@ -83,6 +90,16 @@ def create_entry(password_df : pandas.DataFrame) -> None:
     password_df.index += 1
     password_df.sort_index()
     #Return to main options list upon user completion
+    print()
+
+def generate_entry(password_df : pandas.DataFrame):
+    print("Generating a new secure password")
+    website = input("What website is this password associated with? ")
+    password = ''.join(secrets.choice(PASSWORD_CHARACTERS) for i in range(15))
+    password_df.loc[-1] = [website, password, True]
+    password_df.index += 1
+    password_df.sort_index()
+    print()
 
 def update_entry(password_df : pandas.DataFrame) -> None:
     print("Updating existing password entry")
@@ -103,6 +120,7 @@ def update_entry(password_df : pandas.DataFrame) -> None:
     #Find existing active website entry
     #Expire entry, replace with new entry
     #Return to main options list upon user completion
+    print()
 
 def delete_entry(password_df : pandas.DataFrame) -> None:
     print("WARNING: Deleting an entry is permanent and cannot be reversed.")
@@ -121,6 +139,7 @@ def delete_entry(password_df : pandas.DataFrame) -> None:
         #Return to main options list upon user completion
     else:
         print("Deletion aborted.  Returning to main options list.")
+    print()
 
 if __name__ == "__main__":
     main()
